@@ -91,11 +91,26 @@ Text *size* adapts live (see above). Text *family* — e.g. a user switching
 their system font on an OEM that supports it — does not have a live signal
 to hook into, so this is handled on a best-effort, restart-only basis:
 
-- `src/constants/fonts.ts` deliberately leaves `regular`/`medium`/`bold`
-  `undefined` instead of naming a family (it previously said `'System'`,
-  which isn't a real font alias and was unused dead code anyway). Passing
-  `undefined` as `fontFamily` — now wired into `Button`/`Header`/`Input` —
-  makes `Text`/`TextInput` fall back to the OS default typeface.
+- `src/constants/fonts.ts` exposes `getFontFamily(useSystemFont)`:
+  - `true` — returns `undefined`, so `Text`/`TextInput` (wired via
+    `Button`/`Header`/`Input`) fall back to the OS default typeface, with
+    the restart-based OEM adaptation described below.
+  - `false` — returns a fixed font (`Helvetica Neue` on iOS, `Roboto` on
+    Android, `FIXED_FALLBACK_FONT`) that never changes regardless of the
+    device's OS-level font setting, for when a consistent brand look
+    matters more than tracking the OS.
+  - `USE_SYSTEM_FONT` is just the initial value for the flag below — it's
+    no longer the only thing driving `fontFamily`.
+- This is a **live, in-app toggle**, not just a build-time constant.
+  `FontFamilyPreferenceContext` (`src/hooks/FontFamilyPreferenceContext.tsx`)
+  holds `useSystemFont` in React state, provided at the app root
+  (`src/App.tsx`) and consumed through `useTheme()`. The Home screen has a
+  "Use system font" `Switch` wired to it, so flipping it re-renders
+  `Header`/`Button`/`Input`/the scaled samples immediately — no restart
+  needed *for the toggle itself*. What still needs a restart is Android
+  picking up a *new* OEM font while `useSystemFont` is `true` (see below);
+  switching the toggle between "OS default" and "fixed font" is instant
+  either way.
 - On Android, `Typeface.DEFAULT` is resolved from a framework resource. Some
   OEM skins (Samsung One UI's Settings → Display → Font style, some
   MIUI/OnePlus builds) override that resource system-wide when the user
@@ -112,9 +127,20 @@ to hook into, so this is handled on a best-effort, restart-only basis:
   default; stock Android (AOSP, Pixel, most emulators) has no such setting,
   so it can't be exercised on a standard AVD.
 
-**Manual test (Android, OEM device with a font-style setting only):**
+**Manual test — toggle (any platform):**
 
-1. Launch the app, note the rendered typeface on Home screen text.
+1. Launch the app with "Use system font" on (default). Note the typeface on
+   the Header title, Button text, and scaled samples.
+2. Flip the "Use system font" switch off. Confirm those same elements
+   immediately re-render in the fixed fallback font shown in the hint text
+   below the switch — no restart needed.
+3. Flip it back on and confirm text returns to the OS default typeface.
+
+**Manual test — OEM cold-start adaptation (Android, OEM device with a
+font-style setting only):**
+
+1. With "Use system font" on, launch the app, note the rendered typeface on
+   Home screen text.
 2. Open Settings → Display → Font style (path varies by OEM) and pick a
    different font.
 3. Fully close the app (remove from recents, not just background) and
@@ -170,7 +196,8 @@ to hook into, so this is handled on a best-effort, restart-only basis:
 | Accelerator run documented | Done (this doc) |
 | Listener/hook for system font changes | Done — `useFontScale` |
 | Typography updates without restart (size) | Done — verified via manual steps above; Android required the config plugin fix |
-| Typography adapts to system font family | Restart-only, by design — no live signal exists for this (see "Font family (typeface) adaptation"); OEM-dependent on Android, no-op on iOS |
+| Typography adapts to system font family | Cold-start-only for OS-tracked mode, by design — no live signal exists for this (see "Font family (typeface) adaptation"); OEM-dependent on Android, no-op on iOS |
+| UI toggle to switch system font vs. fixed font | Done — "Use system font" `Switch` on Home screen, backed by `FontFamilyPreferenceContext`; switches instantly, no restart needed for the toggle itself |
 | Tested on iOS and Android | See Manual test steps — requires a physical/simulator run, not automatable in this environment |
 | Findings/limitations documented | Done (this doc) |
 | Code reviewed and approved | Pending review |

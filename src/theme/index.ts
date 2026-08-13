@@ -1,9 +1,9 @@
-import { colors } from '../constants/colors';
-import { fonts } from '../constants/fonts';
+import { colors } from "../constants/colors";
+import { sizes } from "../constants/fonts";
 
 export const theme = {
   colors,
-  fonts,
+  fonts: { sizes },
   spacing: {
     xs: 4,
     sm: 8,
@@ -12,4 +12,3 @@ export const theme = {
     xl: 32,
   },
 };
-

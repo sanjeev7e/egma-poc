@@ -1,4 +1,4 @@
-import { fonts } from "../constants/fonts";
+import { sizes } from "../constants/fonts";
 
 // Clamp so extreme accessibility settings (e.g. iOS AX5, Android 200%) scale
 // text up for readability without breaking fixed-size chrome (buttons, headers).
@@ -12,9 +12,9 @@ export const clampFontScale = (scale: number) => {
 export const getScaledFontSizes = (fontScale: number) => {
   const scale = clampFontScale(fontScale);
   return {
-    small: fonts.sizes.small * scale,
-    medium: fonts.sizes.medium * scale,
-    large: fonts.sizes.large * scale,
-    xlarge: fonts.sizes.xlarge * scale,
+    small: sizes.small * scale,
+    medium: sizes.medium * scale,
+    large: sizes.large * scale,
+    xlarge: sizes.xlarge * scale,
   };
 };

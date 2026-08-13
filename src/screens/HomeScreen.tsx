@@ -1,13 +1,14 @@
 import React from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Switch } from "react-native";
 import Header from "../components/Header";
 import Button from "../components/Button";
+import { FIXED_FALLBACK_FONT } from "../constants/fonts";
 import { useTheme } from "../hooks/useTheme";
 
 export default function HomeScreen() {
   const appVariant = process.env.EXPO_PUBLIC_APP_VARIANT || "not set";
   const apiUrl = process.env.EXPO_PUBLIC_API_URL || "not set";
-  const { fonts, fontScale } = useTheme();
+  const { fonts, fontScale, useSystemFont, setUseSystemFont } = useTheme();
 
   return (
     <ScrollView style={styles.container}>
@@ -47,27 +48,59 @@ export default function HomeScreen() {
           </Text>
           <Text
             allowFontScaling={false}
-            style={[styles.sample, { fontSize: fonts.sizes.small }]}
+            style={[
+              styles.sample,
+              { fontSize: fonts.sizes.small, fontFamily: fonts.regular },
+            ]}
           >
             small ({fonts.sizes.small.toFixed(1)}px)
           </Text>
           <Text
             allowFontScaling={false}
-            style={[styles.sample, { fontSize: fonts.sizes.medium }]}
+            style={[
+              styles.sample,
+              { fontSize: fonts.sizes.medium, fontFamily: fonts.regular },
+            ]}
           >
             medium ({fonts.sizes.medium.toFixed(1)}px)
           </Text>
           <Text
             allowFontScaling={false}
-            style={[styles.sample, { fontSize: fonts.sizes.large }]}
+            style={[
+              styles.sample,
+              { fontSize: fonts.sizes.large, fontFamily: fonts.regular },
+            ]}
           >
             large ({fonts.sizes.large.toFixed(1)}px)
           </Text>
           <Text
             allowFontScaling={false}
-            style={[styles.sample, { fontSize: fonts.sizes.xlarge }]}
+            style={[
+              styles.sample,
+              { fontSize: fonts.sizes.xlarge, fontFamily: fonts.regular },
+            ]}
           >
             xlarge ({fonts.sizes.xlarge.toFixed(1)}px)
+          </Text>
+        </View>
+
+        <View style={styles.card}>
+          <View style={styles.toggleRow}>
+            <Text
+              allowFontScaling={false}
+              style={[styles.label, { fontSize: fonts.sizes.medium }]}
+            >
+              Use system font
+            </Text>
+            <Switch value={useSystemFont} onValueChange={setUseSystemFont} />
+          </View>
+          <Text
+            allowFontScaling={false}
+            style={[styles.hint, { fontSize: fonts.sizes.small }]}
+          >
+            On: text tracks the OS default typeface (adapts to an OEM font
+            change on Android after a restart). Off: text is pinned to{" "}
+            {FIXED_FALLBACK_FONT} regardless of the device&apos;s font setting.
           </Text>
         </View>
 
@@ -116,6 +149,12 @@ const styles = StyleSheet.create({
   },
   label: {
     fontWeight: "600",
+    marginBottom: 8,
+  },
+  toggleRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 8,
   },
   scaleValue: {
