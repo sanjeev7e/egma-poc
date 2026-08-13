@@ -13,7 +13,10 @@ export default function Header({ title }: HeaderProps) {
     <View style={styles.header}>
       <Text
         allowFontScaling={false}
-        style={[styles.title, { fontSize: fonts.sizes.large }]}
+        style={[
+          styles.title,
+          { fontSize: fonts.sizes.large, fontFamily: fonts.bold },
+        ]}
       >
         {title}
       </Text>

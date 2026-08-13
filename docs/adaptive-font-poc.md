@@ -85,6 +85,45 @@ Issues/gaps found during setup:
    main) and confirm the screen *does* reset — this isolates the config
    plugin as the reason Android doesn't restart.
 
+## Font family (typeface) adaptation — cold-start only
+
+Text *size* adapts live (see above). Text *family* — e.g. a user switching
+their system font on an OEM that supports it — does not have a live signal
+to hook into, so this is handled on a best-effort, restart-only basis:
+
+- `src/constants/fonts.ts` deliberately leaves `regular`/`medium`/`bold`
+  `undefined` instead of naming a family (it previously said `'System'`,
+  which isn't a real font alias and was unused dead code anyway). Passing
+  `undefined` as `fontFamily` — now wired into `Button`/`Header`/`Input` —
+  makes `Text`/`TextInput` fall back to the OS default typeface.
+- On Android, `Typeface.DEFAULT` is resolved from a framework resource. Some
+  OEM skins (Samsung One UI's Settings → Display → Font style, some
+  MIUI/OnePlus builds) override that resource system-wide when the user
+  picks a font. Because our styles never override `fontFamily`, the app
+  picks up whichever typeface the OEM has set — but only at process start,
+  since Android caches the resolved `Typeface` and there's no
+  `Configuration`-level broadcast for a font-family change (unlike
+  `fontScale`). **A full app restart (not just background/foreground) is
+  required** to see the new font.
+- On iOS there's no OS-level "swap the system font for all apps" setting
+  exposed to third-party apps, so this is a no-op there beyond the default
+  San Francisco font.
+- This only works on OEMs whose skin actually overrides the framework
+  default; stock Android (AOSP, Pixel, most emulators) has no such setting,
+  so it can't be exercised on a standard AVD.
+
+**Manual test (Android, OEM device with a font-style setting only):**
+
+1. Launch the app, note the rendered typeface on Home screen text.
+2. Open Settings → Display → Font style (path varies by OEM) and pick a
+   different font.
+3. Fully close the app (remove from recents, not just background) and
+   relaunch.
+4. Confirm Home screen text now renders in the newly selected font. Merely
+   backgrounding/foregrounding (as with the live `fontScale` test) is
+   expected to *not* pick up the change — that's the cold-start limitation
+   above, not a bug.
+
 ## Findings / limitations
 
 - **RN's native font auto-scaling doesn't update live.** By default,
@@ -117,6 +156,11 @@ Issues/gaps found during setup:
   handling that's already present by default; Bold Text
   (`AccessibilityInfo.isBoldTextEnabled`) is a separate accessibility signal
   not addressed here.
+- **Font family adaptation is restart-only, and OEM-dependent.** See "Font
+  family (typeface) adaptation" above — there is no live event for it like
+  there is for `fontScale`, and it only has any effect at all on OEM skins
+  that override the default typeface system-wide (not stock Android, not
+  iOS).
 
 ## Definition of Done — status
 
@@ -125,7 +169,8 @@ Issues/gaps found during setup:
 | POC app initialized via accelerator script | Done (already committed) |
 | Accelerator run documented | Done (this doc) |
 | Listener/hook for system font changes | Done — `useFontScale` |
-| Typography updates without restart | Done — verified via manual steps above; Android required the config plugin fix |
+| Typography updates without restart (size) | Done — verified via manual steps above; Android required the config plugin fix |
+| Typography adapts to system font family | Restart-only, by design — no live signal exists for this (see "Font family (typeface) adaptation"); OEM-dependent on Android, no-op on iOS |
 | Tested on iOS and Android | See Manual test steps — requires a physical/simulator run, not automatable in this environment |
 | Findings/limitations documented | Done (this doc) |
 | Code reviewed and approved | Pending review |

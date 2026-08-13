@@ -14,7 +14,10 @@ export default function Button({ title, onPress }: ButtonProps) {
     <TouchableOpacity style={styles.button} onPress={onPress}>
       <Text
         allowFontScaling={false}
-        style={[styles.text, { fontSize: fonts.sizes.medium }]}
+        style={[
+          styles.text,
+          { fontSize: fonts.sizes.medium, fontFamily: fonts.regular },
+        ]}
       >
         {title}
       </Text>

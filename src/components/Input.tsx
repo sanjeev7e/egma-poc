@@ -18,7 +18,10 @@ export default function Input({
   return (
     <TextInput
       allowFontScaling={false}
-      style={[styles.input, { fontSize: fonts.sizes.medium }]}
+      style={[
+        styles.input,
+        { fontSize: fonts.sizes.medium, fontFamily: fonts.regular },
+      ]}
       placeholder={placeholder}
       value={value}
       onChangeText={onChangeText}
