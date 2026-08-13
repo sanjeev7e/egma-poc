@@ -1,5 +1,6 @@
-import React from 'react';
-import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+import React from "react";
+import { TouchableOpacity, Text, StyleSheet } from "react-native";
+import { useTheme } from "../hooks/useTheme";
 
 interface ButtonProps {
   title: string;
@@ -7,24 +8,29 @@ interface ButtonProps {
 }
 
 export default function Button({ title, onPress }: ButtonProps) {
+  const { fonts } = useTheme();
+
   return (
     <TouchableOpacity style={styles.button} onPress={onPress}>
-      <Text style={styles.text}>{title}</Text>
+      <Text
+        allowFontScaling={false}
+        style={[styles.text, { fontSize: fonts.sizes.medium }]}
+      >
+        {title}
+      </Text>
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#007AFF',
+    backgroundColor: "#007AFF",
     padding: 12,
     borderRadius: 8,
-    alignItems: 'center',
+    alignItems: "center",
   },
   text: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
+    color: "#fff",
+    fontWeight: "600",
   },
 });
-

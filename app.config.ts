@@ -1,10 +1,12 @@
 import dotenv from "dotenv";
+import withAndroidFontScaleConfigChange from "./plugins/withAndroidFontScaleConfigChange";
 
 dotenv.config();
 
 // Permission constants
 const PERMISSIONS = {
-  notifications: "We use notifications to keep you updated about important alerts.",
+  notifications:
+    "We use notifications to keep you updated about important alerts.",
 };
 
 function getBundleIdentifier() {
@@ -25,7 +27,8 @@ function getAndroidPackage() {
 function getIconPath(prefix: string) {
   const appVariant = process.env.EXPO_PUBLIC_APP_VARIANT;
   if (appVariant === "prod") return `./src/assets/icons/${prefix}-prod.png`;
-  if (appVariant === "preprod") return `./src/assets/icons/${prefix}-preprod.png`;
+  if (appVariant === "preprod")
+    return `./src/assets/icons/${prefix}-preprod.png`;
   if (appVariant === "qa") return `./src/assets/icons/${prefix}-qa.png`;
   return `./src/assets/icons/${prefix}-develop.png`;
 }
@@ -87,6 +90,6 @@ export default {
         enableBackgroundRemoteNotifications: false,
       },
     ],
+    withAndroidFontScaleConfigChange,
   ],
 };
-

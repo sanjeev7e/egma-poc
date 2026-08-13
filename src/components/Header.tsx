@@ -1,14 +1,22 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React from "react";
+import { View, Text, StyleSheet } from "react-native";
+import { useTheme } from "../hooks/useTheme";
 
 interface HeaderProps {
   title: string;
 }
 
 export default function Header({ title }: HeaderProps) {
+  const { fonts } = useTheme();
+
   return (
     <View style={styles.header}>
-      <Text style={styles.title}>{title}</Text>
+      <Text
+        allowFontScaling={false}
+        style={[styles.title, { fontSize: fonts.sizes.large }]}
+      >
+        {title}
+      </Text>
     </View>
   );
 }
@@ -16,13 +24,11 @@ export default function Header({ title }: HeaderProps) {
 const styles = StyleSheet.create({
   header: {
     padding: 16,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderBottomWidth: 1,
-    borderBottomColor: '#eee',
+    borderBottomColor: "#eee",
   },
   title: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 });
-

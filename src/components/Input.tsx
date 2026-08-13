@@ -1,5 +1,6 @@
-import React from 'react';
-import { TextInput, StyleSheet } from 'react-native';
+import React from "react";
+import { TextInput, StyleSheet } from "react-native";
+import { useTheme } from "../hooks/useTheme";
 
 interface InputProps {
   placeholder?: string;
@@ -7,10 +8,17 @@ interface InputProps {
   onChangeText: (text: string) => void;
 }
 
-export default function Input({ placeholder, value, onChangeText }: InputProps) {
+export default function Input({
+  placeholder,
+  value,
+  onChangeText,
+}: InputProps) {
+  const { fonts } = useTheme();
+
   return (
     <TextInput
-      style={styles.input}
+      allowFontScaling={false}
+      style={[styles.input, { fontSize: fonts.sizes.medium }]}
       placeholder={placeholder}
       value={value}
       onChangeText={onChangeText}
@@ -21,10 +29,8 @@ export default function Input({ placeholder, value, onChangeText }: InputProps) 
 const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     borderRadius: 8,
     padding: 12,
-    fontSize: 16,
   },
 });
-
