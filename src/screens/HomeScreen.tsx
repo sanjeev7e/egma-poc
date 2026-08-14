@@ -17,19 +17,28 @@ export default function HomeScreen() {
         <View style={styles.card}>
           <Text
             allowFontScaling={false}
-            style={[styles.label, { fontSize: fonts.sizes.medium }]}
+            style={[
+              styles.label,
+              { fontSize: fonts.sizes.medium, fontFamily: fonts.regular },
+            ]}
           >
             Live system font scale
           </Text>
           <Text
             allowFontScaling={false}
-            style={[styles.scaleValue, { fontSize: fonts.sizes.xlarge }]}
+            style={[
+              styles.scaleValue,
+              { fontSize: fonts.sizes.xlarge, fontFamily: fonts.regular },
+            ]}
           >
             {fontScale.toFixed(2)}x
           </Text>
           <Text
             allowFontScaling={false}
-            style={[styles.hint, { fontSize: fonts.sizes.small }]}
+            style={[
+              styles.hint,
+              { fontSize: fonts.sizes.small, fontFamily: fonts.regular },
+            ]}
           >
             Change the system text size in Settings (iOS: Settings →
             Accessibility → Display & Text Size → Larger Text. Android: Settings
@@ -42,7 +51,10 @@ export default function HomeScreen() {
         <View style={styles.card}>
           <Text
             allowFontScaling={false}
-            style={[styles.label, { fontSize: fonts.sizes.medium }]}
+            style={[
+              styles.label,
+              { fontSize: fonts.sizes.medium, fontFamily: fonts.regular },
+            ]}
           >
             Scaled samples
           </Text>
@@ -88,7 +100,10 @@ export default function HomeScreen() {
           <View style={styles.toggleRow}>
             <Text
               allowFontScaling={false}
-              style={[styles.label, { fontSize: fonts.sizes.medium }]}
+              style={[
+                styles.label,
+                { fontSize: fonts.sizes.medium, fontFamily: fonts.regular },
+              ]}
             >
               Use system font
             </Text>
@@ -96,7 +111,10 @@ export default function HomeScreen() {
           </View>
           <Text
             allowFontScaling={false}
-            style={[styles.hint, { fontSize: fonts.sizes.small }]}
+            style={[
+              styles.hint,
+              { fontSize: fonts.sizes.small, fontFamily: fonts.regular },
+            ]}
           >
             On: text tracks the OS default typeface (adapts to an OEM font
             change on Android after a restart). Off: text is pinned to{" "}
@@ -111,7 +129,10 @@ export default function HomeScreen() {
         <View style={styles.envContainer}>
           <Text
             allowFontScaling={false}
-            style={[styles.label, { fontSize: fonts.sizes.medium }]}
+            style={[
+              styles.label,
+              { fontSize: fonts.sizes.medium, fontFamily: fonts.regular },
+            ]}
           >
             Environment Variables:
           </Text>
