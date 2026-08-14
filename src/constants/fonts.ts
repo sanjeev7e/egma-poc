@@ -6,9 +6,18 @@ import { Platform } from "react-native";
 // switches between the OS default typeface and a fixed fallback font.
 export const USE_SYSTEM_FONT = true;
 
+// On Android, naming the literal system alias ("Roboto") isn't actually
+// pinned: OEM skins and system-wide font-changer tools (e.g. Samsung One UI
+// Font style, MIUI, HiFont/iFont-style Magisk modules) replace the font
+// files backing that alias, so requesting "Roboto" by name still resolves to
+// whatever the device swapped in. "RobotoFixed" is our own bundled font
+// (src/assets/fonts/Roboto-*.ttf, embedded via the expo-font config plugin
+// in app.config.ts), registered under a family name no OS override targets,
+// so it renders identically regardless of the device's font setting.
 export const FIXED_FALLBACK_FONT = Platform.select({
   ios: "Helvetica Neue",
-  android: "Roboto",
+  android: "RobotoFixed",
+  default: "Arial",
 });
 
 // undefined => Text/TextInput fall back to the OS default typeface (tracks

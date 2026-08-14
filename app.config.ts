@@ -80,7 +80,22 @@ export default {
     },
   },
   plugins: [
-    "expo-font",
+    [
+      "expo-font",
+      {
+        android: {
+          fonts: [
+            {
+              fontFamily: "RobotoFixed",
+              fontDefinitions: [
+                { path: "./src/assets/fonts/Roboto-Regular.ttf", weight: 400 },
+                { path: "./src/assets/fonts/Roboto-Bold.ttf", weight: 700 },
+              ],
+            },
+          ],
+        },
+      },
+    ],
     [
       "expo-notifications",
       {

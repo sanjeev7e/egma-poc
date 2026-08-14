@@ -95,10 +95,23 @@ to hook into, so this is handled on a best-effort, restart-only basis:
   - `true` — returns `undefined`, so `Text`/`TextInput` (wired via
     `Button`/`Header`/`Input`) fall back to the OS default typeface, with
     the restart-based OEM adaptation described below.
-  - `false` — returns a fixed font (`Helvetica Neue` on iOS, `Roboto` on
-    Android, `FIXED_FALLBACK_FONT`) that never changes regardless of the
+  - `false` — returns a fixed font (`Helvetica Neue` on iOS, `RobotoFixed`
+    on Android, `FIXED_FALLBACK_FONT`) that never changes regardless of the
     device's OS-level font setting, for when a consistent brand look
     matters more than tracking the OS.
+  - **Naming the literal `Roboto` alias on Android is not actually pinned.**
+    OEM skins and system-wide font-changer tools (Samsung One UI's Font
+    style, MIUI/OnePlus builds, HiFont/iFont-style Magisk modules) replace
+    the font files backing the `Roboto`/`sans-serif` alias itself, not just
+    `Typeface.DEFAULT` — so requesting `"Roboto"` by name still resolves to
+    whichever font the device swapped in, and the toggle appears to do
+    nothing. The fix is `RobotoFixed`: an actual Roboto 400/700 `.ttf` pair
+    bundled at `src/assets/fonts/` and embedded via the `expo-font` config
+    plugin in `app.config.ts`, registered under a family name no OS/OEM
+    override targets. Because it's not resolved through any system alias,
+    it renders identically regardless of the device's font setting.
+    Requires `expo prebuild` (or a full native rebuild) to pick up — it's a
+    build-time config plugin, not a runtime asset load.
   - `USE_SYSTEM_FONT` is just the initial value for the flag below — it's
     no longer the only thing driving `fontFamily`.
 - This is a **live, in-app toggle**, not just a build-time constant.
