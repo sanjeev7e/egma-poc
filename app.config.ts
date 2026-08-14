@@ -92,6 +92,15 @@ export default {
                 { path: "./src/assets/fonts/Roboto-Bold.ttf", weight: 700 },
               ],
             },
+            {
+              fontFamily: "RobotoMonoFixed",
+              fontDefinitions: [
+                {
+                  path: "./src/assets/fonts/RobotoMono-Regular.ttf",
+                  weight: 400,
+                },
+              ],
+            },
           ],
         },
       },

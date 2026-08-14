@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet, ScrollView, Switch } from "react-native";
 import Header from "../components/Header";
 import Button from "../components/Button";
-import { FIXED_FALLBACK_FONT } from "../constants/fonts";
+import { FIXED_FALLBACK_FONT, FIXED_MONOSPACE_FONT } from "../constants/fonts";
 import { useTheme } from "../hooks/useTheme";
 
 export default function HomeScreen() {
@@ -197,6 +197,6 @@ const styles = StyleSheet.create({
   },
   envText: {
     marginBottom: 8,
-    fontFamily: "monospace",
+    fontFamily: FIXED_MONOSPACE_FONT,
   },
 });

@@ -20,6 +20,16 @@ export const FIXED_FALLBACK_FONT = Platform.select({
   default: "Arial",
 });
 
+// The generic "monospace" alias has the same problem as "Roboto" above: it's
+// a system alias, so the same OEM/font-changer overrides that hijack
+// "Roboto" also hijack "monospace". "RobotoMonoFixed" is a bundled font
+// (src/assets/fonts/RobotoMono-Regular.ttf) for call sites that need a
+// monospaced look (e.g. env var dumps) that can't be swapped out.
+export const FIXED_MONOSPACE_FONT = Platform.select({
+  android: "RobotoMonoFixed",
+  default: "monospace",
+});
+
 // undefined => Text/TextInput fall back to the OS default typeface (tracks
 // OEM "Font style" overrides on Android, on the app's next cold start — see
 // docs/adaptive-font-poc.md). FIXED_FALLBACK_FONT => pinned, never changes
